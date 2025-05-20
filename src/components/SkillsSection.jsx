@@ -3,28 +3,57 @@ import { cn } from "@/lib/utils";
 
 const skills = [
   // Frontend
-  { name: "HTML/CSS", level: 95, category: "frontend" },
+
   { name: "JavaScript", level: 90, category: "frontend" },
-  { name: "React", level: 90, category: "frontend" },
   { name: "TypeScript", level: 85, category: "frontend" },
+  { name: "Angular", level: 90, category: "frontend" },
+  { name: "React/Reactjs", level: 90, category: "frontend" },
+  { name: "Flutter (Dart)", level: 80, category: "frontend" },
   { name: "Tailwind CSS", level: 90, category: "frontend" },
-  { name: "Next.js", level: 80, category: "frontend" },
+  { name: "HTML/CSS", level: 95, category: "frontend" },
+  { name: "Bootstrap", level: 85, category: "frontend" },
+  { name: "Symfony (Frontend)", level: 75, category: "frontend" },
+  { name: "jQuery", level: 70, category: "frontend" },
+
 
   // Backend
+  { name: "C#", level: 85, category: "backend" },
+  { name: ".NET", level: 85, category: "backend" },
+  { name: "PHP", level: 80, category: "backend" },
+  { name: "Symfony (Backend)", level: 80, category: "backend" },
+  { name: "JavaEE / Spring Boot", level: 75, category: "backend" },
+  { name: "Python", level: 70, category: "backend" },
   { name: "Node.js", level: 80, category: "backend" },
-  { name: "Express", level: 75, category: "backend" },
-  { name: "MongoDB", level: 70, category: "backend" },
+  { name: "JavaFX", level: 70, category: "backend" },
+  { name: "MySQL", level: 90, category: "backend" },
+  { name: "MongoDB", level: 80, category: "backend" },
+  { name: "Firestore", level: 75, category: "backend" },
+  { name: "InfluxDB", level: 70, category: "backend" },
   { name: "PostgreSQL", level: 65, category: "backend" },
-  { name: "GraphQL", level: 60, category: "backend" },
+  { name: "GraphQL", level: 65, category: "backend" },
 
   // Tools
-  { name: "Git/GitHub", level: 90, category: "tools" },
-  { name: "Docker", level: 70, category: "tools" },
+  { name: "Git / GitHub", level: 90, category: "tools" },
+  { name: "Docker / DockerHub", level: 80, category: "tools" },
+  { name: "Jenkins", level: 75, category: "tools" },
+  { name: "Azure DevOps", level: 75, category: "tools" },
+  { name: "Azure Boards", level: 75, category: "tools" },
+  { name: "Jira", level: 75, category: "tools" },
+  { name: "Swagger", level: 80, category: "tools" },
+  { name: "Postman", level: 85, category: "tools" },
   { name: "Figma", level: 85, category: "tools" },
   { name: "VS Code", level: 95, category: "tools" },
+  { name: "Visual Studio", level: 85, category: "tools" },
+  { name: "Vagrant", level: 70, category: "tools" },
+  { name: "Nexus", level: 70, category: "tools" },
+  { name: "SonarQube", level: 75, category: "tools" },
+  { name: "Grafana / Prometheus", level: 70, category: "tools" },
+  { name: "NetBeans", level: 80, category: "tools" },
+  { name: "IntelliJ IDEA", level: 85, category: "tools" },
+  { name: "STS (Spring Tool Suite)", level: 75, category: "tools" },
 ];
 
-const categories = ["all", "frontend", "backend", "tools"];
+const categories = ["all","frontend", "backend", "tools"];
 
 export const SkillsSection = () => {
   const [activeCategory, setActiveCategory] = useState("all");

@@ -11,35 +11,34 @@ export const AboutSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 bg-background bg-opacity-90 px-6 py-4 rounded-xl">
-  <h3 className="text-2xl font-semibold">
-    Passionate Web Developer & Tech Creator
-  </h3>
+            <h3 className="text-2xl font-semibold">
+              Passionate web & mobile software engineer | full-stack developer
+            </h3>
 
-  <p className="text-muted-foreground">
-    With over 1 years of experience in web development, I specialize in creating
-    responsive, accessible, and performant web applications using modern technologies.
-  </p>
+            <p className="text-muted-foreground">
+              With over a year of experience in freelance web development, I specialize in creating responsive, accessible, and high-performance web applications using modern technologies
+            </p>
 
-  <p className="text-muted-foreground">
-    I'm passionate about creating elegant solutions to complex problems, and I'm
-    constantly learning new technologies and techniques to stay at the forefront
-    of the ever-evolving web landscape.
-  </p>
+            <p className="text-muted-foreground">
+              I'm passionate about creating elegant solutions to complex problems, and I'm
+              constantly learning new technologies and techniques to stay at the forefront
+              of the ever-evolving web landscape.
+            </p>
 
-  <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center">
-    <a href="#contact" className="cosmic-button">
-      Get In Touch
-    </a>
+            <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center">
+              <a href="#contact" className="cosmic-button">
+                Get In Touch
+              </a>
 
-    <a
-      href="CV_EN_Farouk_Felfel.pdf"
-      download="CV_EN_Farouk_Felfel.pdf"
-      className="px-6 py-2 rounded-full border border-primary text-primary hover:bg-primary/10 transition-colors duration-300"
-    >
-      Download CV
-    </a>
-  </div>
-</div>
+              <a
+                href="CV_EN_Farouk_Felfel.pdf"
+                download="CV_EN_Farouk_Felfel.pdf"
+                className="px-6 py-2 rounded-full border border-primary text-primary hover:bg-primary/10 transition-colors duration-300"
+              >
+                Download CV
+              </a>
+            </div>
+          </div>
 
 
           <div className="grid grid-cols-1 gap-6">
@@ -49,10 +48,10 @@ export const AboutSection = () => {
                   <Code className="h-6 w-6 text-primary" />
                 </div>
                 <div className="text-left">
-                  <h4 className="font-semibold text-lg"> Web Development</h4>
+                  <h4 className="font-semibold text-lg"> Web & mobile Development</h4>
                   <p className="text-muted-foreground">
                     Creating responsive websites and web applications with
-                    modern frameworks.
+                    modern frontend and backend frameworks.
                   </p>
                 </div>
               </div>
@@ -78,10 +77,9 @@ export const AboutSection = () => {
                 </div>
 
                 <div className="text-left">
-                  <h4 className="font-semibold text-lg">Project Management</h4>
+                  <h4 className="font-semibold text-lg">DevOps & Deployment</h4>
                   <p className="text-muted-foreground">
-                    Leading projects from conception to completion with agile
-                    methodologies.
+                    Streamlining development and deployment workflows using CI/CD pipelines, containerization, and cloud services.
                   </p>
                 </div>
               </div>
