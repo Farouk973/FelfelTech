@@ -113,7 +113,7 @@ export const ContactSection = () => {
             <div className="pt-6">
               <h4 className="font-medium mb-3">Connect With Me</h4>
               <div className="flex justify-center space-x-4">
-                <a href="#" target="_blank"><Linkedin /></a>
+                <a href="https://www.linkedin.com/in/farouk-felfel-588061123?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BNeEAdKczSJyWkMkVbeR%2B1A%3D%3D" target="_blank"><Linkedin /></a>
                 <a href="#" target="_blank"><Twitter /></a>
                 <a href="#" target="_blank"><Instagram /></a>
                 <a href="#" target="_blank"><Twitch /></a>
@@ -134,7 +134,7 @@ export const ContactSection = () => {
                   name="name"
                   required
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary"
-                  placeholder="Farouk Felfel"
+                  placeholder="Farouk falfel"
                 />
               </div>
 

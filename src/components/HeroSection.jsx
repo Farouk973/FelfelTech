@@ -21,9 +21,7 @@ export const HeroSection = () => {
           </h1>
 
           <p className="text-lg md:text-xl text-foreground max-w-2xl mx-auto opacity-0 animate-fade-in-delay-3 bg-background bg-opacity-90 px-4 py-2 rounded-xl">
-  I create stellar web experiences with modern technologies.
-  Specializing in front-end development, I build interfaces that are
-  both beautiful and functional.
+  I craft stellar web applications with modern technologies and solid architecture. Specialized in Angular for front-end and .NET for back-end, I build scalable, maintainable solutions using industry-standard design patterns.
 </p>
 
           <div className="pt-4 opacity-0 animate-fade-in-delay-4">
