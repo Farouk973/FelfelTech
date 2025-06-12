@@ -3,64 +3,67 @@ import { cn } from "@/lib/utils";
 
 const skills = [
   // Frontend
-
   { name: "JavaScript", level: 90, category: "frontend" },
-  { name: "TypeScript", level: 85, category: "frontend" },
+  { name: "TypeScript", level: 90, category: "frontend" },
   { name: "Angular", level: 90, category: "frontend" },
-  { name: "React/Reactjs", level: 90, category: "frontend" },
+  { name: "React/Reactjs", level: 70, category: "frontend" },
   { name: "Flutter (Dart)", level: 80, category: "frontend" },
-  { name: "Tailwind CSS", level: 90, category: "frontend" },
+  { name: "Tailwind CSS", level: 70, category: "frontend" },
   { name: "HTML/CSS", level: 95, category: "frontend" },
   { name: "Bootstrap", level: 85, category: "frontend" },
-  { name: "Symfony (Frontend)", level: 75, category: "frontend" },
+  { name: "Symfony (Frontend)", level: 85, category: "frontend" },
   { name: "jQuery", level: 70, category: "frontend" },
 
-
   // Backend
-  { name: "C#", level: 85, category: "backend" },
-  { name: ".NET", level: 85, category: "backend" },
-  { name: "PHP", level: 80, category: "backend" },
-  { name: "Symfony (Backend)", level: 80, category: "backend" },
-  { name: "JavaEE / Spring Boot", level: 75, category: "backend" },
+  { name: "C#", level: 90, category: "backend" },
+  { name: ".NET", level: 90, category: "backend" },
+  { name: "PHP", level: 85, category: "backend" },
+  { name: "Symfony (Backend)", level: 85, category: "backend" },
+  { name: "Java", level: 90, category: "backend" },
+   { name: "JavaEE", level: 90, category: "backend" },
+    { name: "Spring Boot", level: 90, category: "backend" },
   { name: "Python", level: 70, category: "backend" },
-  { name: "Node.js", level: 80, category: "backend" },
-  { name: "JavaFX", level: 70, category: "backend" },
-  { name: "MySQL", level: 90, category: "backend" },
-  { name: "MongoDB", level: 80, category: "backend" },
-  { name: "Firestore", level: 75, category: "backend" },
-  { name: "InfluxDB", level: 70, category: "backend" },
-  { name: "PostgreSQL", level: 65, category: "backend" },
+  { name: "Node.js", level: 75, category: "backend" },
+  { name: "JavaFX", level: 85, category: "backend" },
   { name: "GraphQL", level: 65, category: "backend" },
 
+  // Databases
+  { name: "MySQL", level: 90, category: "databases" },
+  { name: "MongoDB", level: 90, category: "databases" },
+  { name: "Firestore", level: 75, category: "databases" },
+  { name: "InfluxDB", level: 80, category: "databases" },
+  { name: "PostgreSQL", level: 65, category: "databases" },
+
   // Tools
-  { name: "Git / GitHub", level: 90, category: "tools" },
+  { name: "Git / GitHub", level: 95, category: "tools" },
   { name: "Docker / DockerHub", level: 80, category: "tools" },
   { name: "Jenkins", level: 75, category: "tools" },
-  { name: "Azure DevOps", level: 75, category: "tools" },
-  { name: "Azure Boards", level: 75, category: "tools" },
-  { name: "Jira", level: 75, category: "tools" },
-  { name: "Swagger", level: 80, category: "tools" },
+  { name: "Azure DevOps", level: 95, category: "tools" },
+  { name: "Azure Boards", level: 95, category: "tools" },
+  { name: "Jira", level: 70, category: "tools" },
+  { name: "Swagger", level: 85, category: "tools" },
   { name: "Postman", level: 85, category: "tools" },
   { name: "Figma", level: 85, category: "tools" },
   { name: "VS Code", level: 95, category: "tools" },
-  { name: "Visual Studio", level: 85, category: "tools" },
+  { name: "Visual Studio", level: 95, category: "tools" },
   { name: "Vagrant", level: 70, category: "tools" },
   { name: "Nexus", level: 70, category: "tools" },
-  { name: "SonarQube", level: 75, category: "tools" },
+  { name: "SonarQube", level: 85, category: "tools" },
   { name: "Grafana / Prometheus", level: 70, category: "tools" },
   { name: "NetBeans", level: 80, category: "tools" },
   { name: "IntelliJ IDEA", level: 85, category: "tools" },
-  { name: "STS (Spring Tool Suite)", level: 75, category: "tools" },
+  { name: "STS (Spring Tool Suite)", level: 70, category: "tools" },
 ];
 
-const categories = ["all","frontend", "backend", "tools"];
+const categories = ["frontend", "backend", "databases", "tools"];
 
 export const SkillsSection = () => {
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeCategory, setActiveCategory] = useState("frontend");
 
-  const filteredSkills = skills.filter(
-    (skill) => activeCategory === "all" || skill.category === activeCategory
-  );
+  const filteredSkills = skills
+  .filter( (skill) => skill.category === activeCategory )
+  .sort((a, b) => b.level - a.level);
+
   return (
     <section id="skills" className="py-24 px-4 relative bg-secondary/30">
       <div className="container mx-auto max-w-5xl">
@@ -92,7 +95,7 @@ export const SkillsSection = () => {
               className="bg-card p-6 rounded-lg shadow-xs card-hover"
             >
               <div className="text-left mb-4">
-                <h3 className="font-semibold text-lg"> {skill.name}</h3>
+                <h3 className="font-semibold text-lg">{skill.name}</h3>
               </div>
               <div className="w-full bg-secondary/50 h-2 rounded-full overflow-hidden">
                 <div
@@ -100,7 +103,6 @@ export const SkillsSection = () => {
                   style={{ width: skill.level + "%" }}
                 />
               </div>
-
               <div className="text-right mt-1">
                 <span className="text-sm text-muted-foreground">
                   {skill.level}%
