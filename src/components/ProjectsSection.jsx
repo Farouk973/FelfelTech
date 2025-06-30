@@ -3,12 +3,12 @@ import { ArrowRight, ExternalLink, Github } from "lucide-react";
 const projects = [
   {
     id: 1,
-    title: "SaaS Landing Page",
-    description: "A beautiful landing page app using React and Tailwind.",
-    image: "/projects/project1.png",
-    tags: ["React", "TailwindCSS", "Supabase"],
-    demoUrl: "#",
-    githubUrl: "#",
+    title: ".Net clean architecture ToDoApp",
+    description: "A robust .Net application following clean architecture principles, featuring JWT authentication and CQRS. read readme in github",
+    image: "/projects/clean.jpg",
+    tags: [".Net", "c#", "Jwt", "Clean Architecture", "MediatR", "CQRS", "Entity Framework"],
+    demoUrl: "https://github.com/Farouk973/BaseApp.git",
+    githubUrl: "https://github.com/Farouk973/BaseApp.git",
   },
   {
     id: 2,
