@@ -3,12 +3,9 @@ import { useEffect, useRef, useState } from "react";
 export const HackerBackground = () => {
   const canvasRef = useRef(null);
 
-  // Get initial theme by checking localStorage first, then fallback to class on <html>
-  const getInitialTheme = () => {
-    const storedTheme = localStorage.getItem("theme");
-    if (storedTheme === "dark" || storedTheme === "light") return storedTheme;
-    return document.documentElement.classList.contains("dark") ? "dark" : "light";
-  };
+  // Get initial theme by checking the class on <html> (dark by default)
+  const getInitialTheme = () =>
+    document.documentElement.classList.contains("dark") ? "dark" : "light";
 
   const [theme, setTheme] = useState(getInitialTheme);
 

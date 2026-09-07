@@ -154,8 +154,9 @@ export const ProjectsSection = () => {
             <div
               key={project.id}
               onClick={() => setSelectedProject(project)}
-              className="group bg-card rounded-lg overflow-hidden shadow-xs card-hover cursor-pointer relative"
+              className="group bg-card rounded-lg overflow-hidden shadow-xs card-hover cursor-pointer relative border border-border/40 hover:border-primary/50 transition-all duration-300"
             >
+              <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-primary/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
               <div className={`overflow-hidden ${project.image.endsWith('.svg') ? 'aspect-video bg-secondary/40' : 'h-48'}`}>
                 <img
                   src={project.image}
