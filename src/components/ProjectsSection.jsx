@@ -1,8 +1,70 @@
-import { ArrowRight, ExternalLink, Github, MousePointerClick } from "lucide-react";
-import { useState } from "react";
+import {
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  Github,
+  MousePointerClick,
+} from "lucide-react";
+import { useRef, useState } from "react";
 import { ProjectModal } from "./ProjectModal";
 
 const projects = [
+  {
+    id: 4,
+    title: "Promo Tunisie",
+    description:
+      "Full-stack price comparison and deals aggregator scraping 18+ Tunisian e-commerce stores with a smart two-layer ML classifier.",
+    image: "/projects/promo.svg",
+    tags: ["Angular", "Flutter", ".NET", "Scrapy", "MongoDB", "Machine Learning", "FastAPI", "Python"],
+    demoUrl: "https://promotunisie.com",
+    githubUrl: "https://github.com/Farouk973",
+    detailedDescription:
+      "Promo Tunisie is a full-stack price comparison and deals aggregator that automatically scrapes promotions from 18+ Tunisian e-commerce stores, classifies products into whitelisted categories using a two-layer machine learning classifier, stores them in MongoDB, and serves them through a REST API, an Angular SSR web frontend, and a Flutter mobile app.",
+    techStack: [
+      "Python", "Scrapy", "FastAPI", "httpx", "curl_cffi", "sentence-transformers",
+      "ASP.NET Core", "MongoDB", "Angular 19", "Flutter", "Docker", "GitHub Actions"
+    ],
+    sections: [
+      {
+        title: "Architecture",
+        items: [
+          "Scraper (Python) — Scrapy spiders + FastAPI control plane for crawling 18+ stores",
+          "Backend API (ASP.NET Core) — REST API with MongoDB persistence",
+          "Web Frontend (Angular 19 SSR) — server-side rendered product search & detail pages",
+          "Mobile App (Flutter) — cross-platform app with favorites, filters & barcode scanner",
+          "Deployed on Render.com with GitHub Actions daily cron jobs",
+        ],
+      },
+      {
+        title: "How the Scraper Works",
+        paragraphs: [
+          "Each store is automatically classified into one of two crawl modes via static AST analysis of its spider source code. Simple predictable stores run in direct mode using httpx for async fetching at ~3 requests/sec with token-bucket rate limiting, finishing 1000+ items in 30-40 seconds. Complex stores fall back to running the full Scrapy engine as a subprocess.",
+          "Spider parse() methods extract product title, prices, images, links, and category slugs. A Cloudflare/WAF bypass uses curl_cffi with Chrome TLS impersonation when plain httpx gets a 403. Items flow through a pipeline that validates prices, classifies products, enriches with brand/model, deduplicates, and batches them (50 at a time) to the backend API with exponential-backoff fallbacks.",
+        ],
+      },
+      {
+        title: "How the Classifier Works",
+        paragraphs: [
+          "The classifier uses a two-layer approach. Layer 1 is a deterministic rules engine (95%+ of cases) that runs a carefully ordered sequence of checks: accessory vetoes, TV-brand model signatures, phone bundle detection, and 19 distinct classification rules across 9 whitelisted categories (Phones, Computers, Tablets, Earphones, Watches, TVs, Desktops, Mouse & Keyboards, Consoles). Three independent veto layers prevent the most common misclassifications.",
+          "Layer 2 is an optional embedding fallback using paraphrase-multilingual-MiniLM-L12-v2 via sentence-transformers. Items the rules could not decide are embedded and compared against category prototype phrases with cosine similarity, gated by a confidence threshold and margin. A junk-family veto (printers, appliances, audio, etc.) drops anything ambiguous. The rules layer cannot be overridden by embeddings.",
+          "A 260+ case labelled corpus serves as the pytest regression gate and ground truth for A/B evaluation of rules-only vs hybrid performance. Model names are normalized (e.g. 'redmi 13c' → 'Redmi 13C') to enable cross-store product grouping.",
+        ],
+      },
+      {
+        title: "Notable Features",
+        items: [
+          "Barcode (EAN/GTIN) extraction from JSON-LD for product matching",
+          "Per-category price floors to drop misparsed prices (e.g. < 20 TND for phones)",
+          "Cross-store product catalog rebuilding after each crawl",
+          "Automatic expired-promotion cleanup in the background",
+          "File-based live progress visualization across concurrent crawls",
+          "Daily automated crawls via GitHub Actions cron at 03:00 UTC",
+        ],
+      },
+    ],
+    links: ["Live Site", "GitHub"],
+  },
   {
     id: 1,
     title: ".Net clean architecture ToDoApp",
@@ -75,65 +137,18 @@ const projects = [
     ],
     links: ["Live Demo", "GitHub"],
   },
-  {
-    id: 4,
-    title: "Promo Tunisie",
-    description:
-      "Full-stack price comparison and deals aggregator scraping 18+ Tunisian e-commerce stores with a smart two-layer ML classifier.",
-    image: "/projects/promo.svg",
-    tags: ["Angular", "Flutter", ".NET", "Scrapy", "MongoDB", "Machine Learning", "FastAPI", "Python"],
-    demoUrl: "https://promotunisie.com",
-    githubUrl: "https://github.com/Farouk973",
-    detailedDescription:
-      "Promo Tunisie is a full-stack price comparison and deals aggregator that automatically scrapes promotions from 18+ Tunisian e-commerce stores, classifies products into whitelisted categories using a two-layer machine learning classifier, stores them in MongoDB, and serves them through a REST API, an Angular SSR web frontend, and a Flutter mobile app.",
-    techStack: [
-      "Python", "Scrapy", "FastAPI", "httpx", "curl_cffi", "sentence-transformers",
-      "ASP.NET Core", "MongoDB", "Angular 19", "Flutter", "Docker", "GitHub Actions"
-    ],
-    sections: [
-      {
-        title: "Architecture",
-        items: [
-          "Scraper (Python) — Scrapy spiders + FastAPI control plane for crawling 18+ stores",
-          "Backend API (ASP.NET Core) — REST API with MongoDB persistence",
-          "Web Frontend (Angular 19 SSR) — server-side rendered product search & detail pages",
-          "Mobile App (Flutter) — cross-platform app with favorites, filters & barcode scanner",
-          "Deployed on Render.com with GitHub Actions daily cron jobs",
-        ],
-      },
-      {
-        title: "How the Scraper Works",
-        paragraphs: [
-          "Each store is automatically classified into one of two crawl modes via static AST analysis of its spider source code. Simple predictable stores run in direct mode using httpx for async fetching at ~3 requests/sec with token-bucket rate limiting, finishing 1000+ items in 30-40 seconds. Complex stores fall back to running the full Scrapy engine as a subprocess.",
-          "Spider parse() methods extract product title, prices, images, links, and category slugs. A Cloudflare/WAF bypass uses curl_cffi with Chrome TLS impersonation when plain httpx gets a 403. Items flow through a pipeline that validates prices, classifies products, enriches with brand/model, deduplicates, and batches them (50 at a time) to the backend API with exponential-backoff fallbacks.",
-        ],
-      },
-      {
-        title: "How the Classifier Works",
-        paragraphs: [
-          "The classifier uses a two-layer approach. Layer 1 is a deterministic rules engine (95%+ of cases) that runs a carefully ordered sequence of checks: accessory vetoes, TV-brand model signatures, phone bundle detection, and 19 distinct classification rules across 9 whitelisted categories (Phones, Computers, Tablets, Earphones, Watches, TVs, Desktops, Mouse & Keyboards, Consoles). Three independent veto layers prevent the most common misclassifications.",
-          "Layer 2 is an optional embedding fallback using paraphrase-multilingual-MiniLM-L12-v2 via sentence-transformers. Items the rules could not decide are embedded and compared against category prototype phrases with cosine similarity, gated by a confidence threshold and margin. A junk-family veto (printers, appliances, audio, etc.) drops anything ambiguous. The rules layer cannot be overridden by embeddings.",
-          "A 260+ case labelled corpus serves as the pytest regression gate and ground truth for A/B evaluation of rules-only vs hybrid performance. Model names are normalized (e.g. 'redmi 13c' → 'Redmi 13C') to enable cross-store product grouping.",
-        ],
-      },
-      {
-        title: "Notable Features",
-        items: [
-          "Barcode (EAN/GTIN) extraction from JSON-LD for product matching",
-          "Per-category price floors to drop misparsed prices (e.g. < 20 TND for phones)",
-          "Cross-store product catalog rebuilding after each crawl",
-          "Automatic expired-promotion cleanup in the background",
-          "File-based live progress visualization across concurrent crawls",
-          "Daily automated crawls via GitHub Actions cron at 03:00 UTC",
-        ],
-      },
-    ],
-    links: ["Live Site", "GitHub"],
-  },
 ];
 
 export const ProjectsSection = () => {
   const [selectedProject, setSelectedProject] = useState(null);
+  const scrollRef = useRef(null);
+
+  const scrollBy = (direction) => {
+    scrollRef.current?.scrollBy({
+      left: direction * scrollRef.current.clientWidth * 0.8,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <section id="projects" className="py-24 px-4 relative">
@@ -143,76 +158,96 @@ export const ProjectsSection = () => {
           Featured <span className="text-primary"> Projects </span>
         </h2>
 
-        <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+        <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
           Here are some of my recent projects. Each project was carefully
           crafted with attention to detail, performance, and user experience.
           Click on a card to see the details.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
-            <div
-              key={project.id}
-              onClick={() => setSelectedProject(project)}
-              className="group bg-card rounded-lg overflow-hidden shadow-xs card-hover cursor-pointer relative border border-border/40 hover:border-primary/50 transition-all duration-300"
-            >
-              <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-primary/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-              <div className={`overflow-hidden ${project.image.endsWith('.svg') ? 'aspect-video bg-secondary/40' : 'h-48'}`}>
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${project.image.endsWith('.svg') ? 'object-contain' : ''}`}
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = "/projects/project1.png";
-                  }}
-                />
-              </div>
-
-              <div className="p-6">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="px-2 py-1 text-xs font-medium border rounded-full bg-secondary text-secondary-foreground"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+        <div className="relative">
+          <div
+            ref={scrollRef}
+            className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4"
+          >
+            {projects.map((project) => (
+              <div
+                key={project.id}
+                onClick={() => setSelectedProject(project)}
+                className="group bg-card rounded-lg overflow-hidden shadow-xs card-hover cursor-pointer relative border border-border/40 hover:border-primary/50 transition-all duration-300 snap-start w-[300px] sm:w-[340px] shrink-0"
+              >
+                <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-primary/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                <div className={`overflow-hidden ${project.image.endsWith('.svg') ? 'aspect-video bg-secondary/40' : 'h-48'}`}>
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${project.image.endsWith('.svg') ? 'object-contain' : ''}`}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "/projects/project1.png";
+                    }}
+                  />
                 </div>
 
-                <h3 className="text-xl font-semibold mb-1"> {project.title}</h3>
-                <p className="text-muted-foreground text-sm mb-4">
-                  {project.description}
-                </p>
-                <div className="flex justify-between items-center">
-                  <div className="flex space-x-3">
-                    <a
-                      href={project.demoUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="text-foreground/80 hover:text-primary transition-colors duration-300"
-                    >
-                      <ExternalLink size={20} />
-                    </a>
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="text-foreground/80 hover:text-primary transition-colors duration-300"
-                    >
-                      <Github size={20} />
-                    </a>
+                <div className="p-6">
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        className="px-2 py-1 text-xs font-medium border rounded-full bg-secondary text-secondary-foreground"
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   </div>
-                  <span className="flex items-center gap-1 text-xs text-foreground/50 group-hover:text-primary transition-colors">
-                    <MousePointerClick size={12} /> Details
-                  </span>
+
+                  <h3 className="text-xl font-semibold mb-1"> {project.title}</h3>
+                  <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
+                    {project.description}
+                  </p>
+                  <div className="flex justify-between items-center">
+                    <div className="flex space-x-3">
+                      <a
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-foreground/80 hover:text-primary transition-colors duration-300"
+                      >
+                        <ExternalLink size={20} />
+                      </a>
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-foreground/80 hover:text-primary transition-colors duration-300"
+                      >
+                        <Github size={20} />
+                      </a>
+                    </div>
+                    <span className="flex items-center gap-1 text-xs text-foreground/50 group-hover:text-primary transition-colors">
+                      <MousePointerClick size={12} /> Details
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          <button
+            onClick={() => scrollBy(-1)}
+            aria-label="Scroll left"
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 items-center justify-center h-10 w-10 rounded-full bg-card border border-border shadow-lg hover:bg-secondary/60 transition-colors"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            onClick={() => scrollBy(1)}
+            aria-label="Scroll right"
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 items-center justify-center h-10 w-10 rounded-full bg-card border border-border shadow-lg hover:bg-secondary/60 transition-colors"
+          >
+            <ChevronRight size={20} />
+          </button>
         </div>
 
         <div className="text-center mt-12">
