@@ -156,11 +156,15 @@ export const ProjectsSection = () => {
               onClick={() => setSelectedProject(project)}
               className="group bg-card rounded-lg overflow-hidden shadow-xs card-hover cursor-pointer relative"
             >
-              <div className="h-48 overflow-hidden">
+              <div className={`overflow-hidden ${project.image.endsWith('.svg') ? 'aspect-video bg-secondary/40' : 'h-48'}`}>
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${project.image.endsWith('.svg') ? 'object-contain' : ''}`}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "/projects/project1.png";
+                  }}
                 />
               </div>
 
@@ -221,10 +225,12 @@ export const ProjectsSection = () => {
         </div>
       </div>
 
-      <ProjectModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
     </section>
   );
 };

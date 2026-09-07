@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 
 export const ProjectModal = ({ project, onClose }) => {
   useEffect(() => {
+    if (!project) return;
+
     const handleKey = (e) => {
       if (e.key === "Escape") onClose();
     };
@@ -13,7 +15,7 @@ export const ProjectModal = ({ project, onClose }) => {
       document.removeEventListener("keydown", handleKey);
       document.body.style.overflow = "";
     };
-  }, [onClose]);
+  }, [project, onClose]);
 
   if (!project) return null;
 
@@ -37,11 +39,15 @@ export const ProjectModal = ({ project, onClose }) => {
         </div>
 
         <div className="p-6 md:p-8">
-          <div className="h-56 md:h-72 overflow-hidden rounded-lg mb-6">
+          <div className="w-full mb-6 rounded-lg overflow-hidden bg-secondary/40">
             <img
               src={project.image}
               alt={project.title}
-              className="w-full h-full object-cover"
+              className="w-full h-auto max-h-72 object-contain"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/projects/project1.png";
+              }}
             />
           </div>
 
