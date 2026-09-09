@@ -11,6 +11,108 @@ import { ProjectModal } from "./ProjectModal";
 
 const projects = [
   {
+    id: 5,
+    title: "Mar1One — E-Commerce Platform",
+    description:
+      "Full-stack clothing e-commerce with Clean Architecture, CQRS/MediatR, MongoDB, a 3-tier discount engine, order state machine, and a full admin dashboard — deployed to production via CI/CD.",
+    image: "/projects/mar1one.svg",
+    tags: [
+      ".NET 8",
+      "Angular 15",
+      "MongoDB",
+      "MediatR",
+      "CQRS",
+      "Clean Architecture",
+      "JWT",
+      "Tailwind CSS",
+    ],
+    demoUrl: "#",
+    githubUrl: "https://github.com/Farouk973",
+    detailedDescription:
+      "Mar1One (originally TripFit) is a full-stack e-commerce platform built for a real client — a clothing shop. The backend follows strict Clean Architecture (Domain → Application → Infrastructure → API) with CQRS via MediatR, persisted in MongoDB with a generic repository pattern. The frontend is an Angular 15 standalone SPA with a public storefront and a full admin CMS, styled entirely with Tailwind CSS. Features include a 3-tier discount/pricing engine (coupons, pack bundles, volume tiers), an order state machine with compensating stock transactions, JWT + refresh token auth, a dashboard with live analytics and a Leaflet visitor map, and a full CI/CD pipeline deployed to a VPS with nginx.",
+    techStack: [
+      ".NET 8",
+      "C#",
+      "MediatR 11",
+      "FluentValidation",
+      "AutoMapper",
+      "MongoDB Driver 3.9",
+      "Angular 15 (Standalone)",
+      "TypeScript",
+      "Tailwind CSS",
+      "Chart.js",
+      "Leaflet",
+      "BCrypt",
+      "JWT + Refresh Tokens",
+      "Nginx",
+      "GitHub Actions",
+      "systemd",
+    ],
+    sections: [
+      {
+        title: "Architecture & Design Patterns",
+        items: [
+          "Clean Architecture (Onion) with 4 strict layers: Domain → Application → Infrastructure → API — zero upward dependencies",
+          "CQRS via MediatR 11 with 68 IRequestHandler implementations across 14 feature areas (Auth, Products, Orders, Categories, Colors, Sizes, Users, Coupons, Inventory, Medias, PackDiscounts, VolumeDiscounts, StoreSettings, Analytics)",
+          "MediatR ValidationBehavior pipeline — FluentValidation validators run before every handler; failures throw grouped ValidationException",
+          "Generic MongoRepository<T> base with paged queries (PagedResult<T> with TotalPages, HasPrevious/NextPage)",
+          "Custom exception middleware mapping domain exceptions to HTTP codes: NotFoundException → 404, ConflictException → 409, ValidationException → 400 with error dictionary",
+          "Thin controllers inheriting ApiControllerBase — all logic lives in CQRS handlers",
+        ],
+      },
+      {
+        title: "Backend — The Hard Parts",
+        paragraphs: [
+          "The pricing engine in CreateOrderCommandHandler (446 lines) is the most complex piece. It stacks 3 discount systems: Coupons (percentage or fixed against subtotal, validated with date windows, min order, max uses), Pack Discounts (fixed bundle price proportionally distributed by unit-price share across products), and Volume Discounts (best-tier by total quantity — percentage rolls into unit price, fixed splits proportionally).",
+          "Order creation validates all stock atomically before any mutation. Each variant uses MongoDB's FindOneAndUpdateAsync with $inc for guarded decrement (fails if insufficient stock unless ContinueSellingWhenOutOfStock). If any later step fails, a compensation routine restores all stock and writes 'OrderFailed' StockMovement audit records — a manual saga pattern.",
+          "Order status follows a strict state machine: Pending → {Paid, Shipped, Cancelled}, Paid → {Shipped, Cancelled}, Shipped → {Delivered, Cancelled}, with terminal states. Status transitions use CAS (Compare-And-Swap) on the expected status to detect concurrent modifications. Cancelling restores stock and logs Return movements.",
+          "File upload supports up to 20 files (10 MB each, 50 MB request cap) with SHA-256 content deduplication — duplicate files are detected and returned separately. Inventory management includes bulk adjust (all-or-nothing with rollback), stock movement audit trail, and MongoDB aggregation pipelines for low-stock queries with computed StockStatus.",
+        ],
+      },
+      {
+        title: "Authentication & Security",
+        items: [
+          "JWT Bearer auth with HS256, role-based authorization (Admin/User), refresh token rotation (7-day opaque tokens, old token revoked + replaced)",
+          "Rate limiting via AspNetCoreRateLimit — 5 login attempts per 15 seconds per IP",
+          "App refuses to start if JWT secret key is missing or < 32 chars — fails loudly in production",
+          "Forwarded Headers middleware for correct client IP behind nginx reverse proxy",
+          "CORS policy locked to Angular origin (localhost:4200 in dev, configurable in prod)",
+          "Password hashing with BCrypt, admin user seeded on startup in Development",
+        ],
+      },
+      {
+        title: "Frontend — Angular 15 Standalone SPA",
+        paragraphs: [
+          "100% standalone components — zero NgModules. Functional interceptors (HttpInterceptorFn) and functional guards (CanActivateFn, CanDeactivateFn). Auth interceptor handles automatic JWT refresh on 401 with single-in-flight flag to prevent refresh storms.",
+          "Public storefront: hero carousel with touch/pointer swipe, rotating multi-language announcement bar (FR/AR/EN), client-side search popup, product detail page with color→image mapping, volume discount tier picker with per-slot variant selection, live countdown timers for scheduled discounts, skeleton loading, and a cart with volume-discount grouping, server-validated coupons, and max-delivery-fee shipping.",
+          "Admin CMS: dashboard with KPI cards, live 'Online Now' (polled every 30s), 4 Chart.js charts (revenue line, order-status doughnut, category-revenue bar, visitor line), Leaflet world map with size-scaled city markers, top-selling/most-clicked lists. Product form with drag-to-reorder chips, on-the-fly color creation with hex picker, media library picker, variant stock matrix editor, and 6-digit SKU validation.",
+          "Unsaved-changes guard on all forms using JSON-stringified form snapshots. Toast notification system (4 types, slide-in) and reusable confirmation dialog for destructive actions.",
+        ],
+      },
+      {
+        title: "Analytics & Geolocation",
+        items: [
+          "Anonymous page-view tracking with session IDs derived from SHA-256(IP:referrer:date)",
+          "Geolocation via ip-api.com with in-memory cache + 40 req/min rate limit; localhost short-circuits to Tunisia default",
+          "Dashboard aggregates: revenue/orders/visitors/online-now/top-selling/top-clicked/revenue-by-category via MongoDB aggregation pipelines",
+          "Visitor cities plotted on a Leaflet map with size-scaled markers in the admin dashboard",
+          "Excludes Cancelled orders from all analytics calculations",
+        ],
+      },
+      {
+        title: "DevOps & Deployment",
+        items: [
+          "GitHub Actions CI/CD: build + test on push to main/develop; SSH deploy to VPS on main merge",
+          "Nginx reverse proxy: HTTP→HTTPS (Let's Encrypt), SPA routing, /api/ and /uploads/ proxied to .NET Kestrel on port 5000, security headers, gzip, static asset caching",
+          "systemd service with secrets loaded from a chmod 600 env file — never committed to git",
+          "Server provisioning script (setup-server.sh) for fresh VPS: firewall, .NET 8 runtime, Node 18, nginx, certbot, systemd, secrets template",
+          "MongoMigration console tool for local→MongoDB Atlas data migration with batched inserts and index cloning",
+        ],
+      },
+    ],
+    links: ["GitHub", "View Repository"],
+  },
+  {
     id: 4,
     title: "Promo Tunisie",
     description:

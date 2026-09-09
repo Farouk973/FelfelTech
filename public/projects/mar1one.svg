@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="55%" stop-color="#3f3f46"/>
+      <stop offset="100%" stop-color="#18181b"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#b8860b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="150" cy="520" r="340" fill="rgba(212,175,55,0.05)"/>
+  <circle cx="1050" cy="110" r="280" fill="rgba(212,175,55,0.04)"/>
+  <text x="600" y="240" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="76" font-weight="800" fill="url(#gold)">Mar1One</text>
+  <text x="600" y="310" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="500" fill="rgba(255,255,255,0.85)">Premium E-Commerce Clothing Platform</text>
+  <rect x="490" y="360" width="220" height="4" rx="2" fill="rgba(212,175,55,0.4)"/>
+  <text x="600" y="430" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="22" font-weight="600" fill="rgba(255,255,255,0.7)">Clean Architecture • CQRS • Angular 15 • MongoDB</text>
+</svg>
