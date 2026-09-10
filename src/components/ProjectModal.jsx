@@ -169,18 +169,30 @@ export const ProjectModal = ({ project, onClose }) => {
                         {group.category}
                       </h4>
                     </div>
-                    <div className="px-4 sm:px-5 pb-4 sm:pb-5">
-                      <ul className="space-y-2">
-                        {group.items.map((item, j) => (
-                          <li
-                            key={j}
-                            className="flex items-start gap-2 text-sm text-foreground/80 leading-relaxed"
-                          >
-                            <span className="text-primary mt-1">▸</span>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                    <div className="px-4 sm:px-5 pb-4 sm:pb-5 space-y-3">
+                      {group.items.map((item, j) => (
+                        <div key={j} className="rounded-lg border border-border/30 bg-background/40 p-3 sm:p-4 space-y-2">
+                          <h5 className="font-medium text-sm text-foreground">{item.title}</h5>
+                          <p className="text-xs sm:text-sm text-foreground/70 leading-relaxed">{item.description}</p>
+                          {item.code && (
+                            <pre className="text-xs bg-secondary/60 border border-border/30 rounded-lg p-2.5 overflow-x-auto text-foreground/60 font-mono leading-relaxed">
+                              <code>{item.code}</code>
+                            </pre>
+                          )}
+                          {item.tools && item.tools.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5 pt-1">
+                              {item.tools.map((tool, k) => (
+                                <span
+                                  key={k}
+                                  className="px-2 py-0.5 text-[10px] sm:text-xs font-medium rounded-md border border-primary/30 bg-primary/10 text-primary"
+                                >
+                                  {tool}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ))}
