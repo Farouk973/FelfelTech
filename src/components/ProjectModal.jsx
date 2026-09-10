@@ -3,6 +3,7 @@ import {
   ExternalLink,
   Github,
   LayoutGrid,
+  ListChecks,
   Sparkles,
   Wrench,
   X,
@@ -12,6 +13,7 @@ import { cn } from "@/lib/utils";
 
 const TABS = [
   { id: "overview", label: "Overview", icon: LayoutGrid },
+  { id: "features", label: "Features", icon: ListChecks },
   { id: "details", label: "Details", icon: Sparkles },
   { id: "stack", label: "Tech Stack", icon: Wrench },
 ];
@@ -48,6 +50,7 @@ export const ProjectModal = ({ project, onClose }) => {
 
   const hasSections = project.sections && project.sections.length > 0;
   const hasStack = project.techStack && project.techStack.length > 0;
+  const hasFeatures = project.features && project.features.length > 0;
 
   const toggleSection = (index) => {
     setOpenSections((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -79,7 +82,7 @@ export const ProjectModal = ({ project, onClose }) => {
         </div>
 
         <div className="flex gap-1 px-4 pt-4 sm:px-5 sm:pt-5 border-b border-border/60">
-          {TABS.map((tab) => {
+          {TABS.filter((tab) => tab.id !== "features" || hasFeatures).map((tab) => {
             const Icon = tab.icon;
             const active = activeTab === tab.id;
             return (
@@ -151,6 +154,42 @@ export const ProjectModal = ({ project, onClose }) => {
               </div>
             </div>
           )}
+
+          {activeTab === "features" &&
+            (hasFeatures ? (
+              <div className="space-y-4">
+                {project.features.map((group, i) => (
+                  <div
+                    key={i}
+                    className="rounded-xl border border-border/50 bg-secondary/20 overflow-hidden"
+                  >
+                    <div className="px-4 sm:px-5 pt-4 sm:pt-5 pb-2">
+                      <h4 className="font-semibold flex items-center gap-2 text-primary">
+                        <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                        {group.category}
+                      </h4>
+                    </div>
+                    <div className="px-4 sm:px-5 pb-4 sm:pb-5">
+                      <ul className="space-y-2">
+                        {group.items.map((item, j) => (
+                          <li
+                            key={j}
+                            className="flex items-start gap-2 text-sm text-foreground/80 leading-relaxed"
+                          >
+                            <span className="text-primary mt-1">▸</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-border p-6 text-center text-muted-foreground text-sm">
+                {emptyState.description}
+              </div>
+            ))}
 
           {activeTab === "details" && (
             <div className="space-y-3">
