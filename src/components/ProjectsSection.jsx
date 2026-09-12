@@ -29,7 +29,7 @@ const projects = [
     demoUrl: "#",
     githubUrl: "https://github.com/Farouk973",
     detailedDescription:
-      "Mar1One (originally TripFit) is a full-stack e-commerce platform built for a real client — a clothing shop. The backend follows strict Clean Architecture (Domain → Application → Infrastructure → API) with CQRS via MediatR, persisted in MongoDB with a generic repository pattern. The frontend is an Angular 15 standalone SPA with a public storefront and a full admin CMS, styled entirely with Tailwind CSS. Features include a 3-tier discount/pricing engine (coupons, pack bundles, volume tiers), an order state machine with compensating stock transactions, JWT + refresh token auth, a dashboard with live analytics and a Leaflet visitor map, and a full CI/CD pipeline deployed to a VPS with nginx.",
+      "Mar1One (originally TripFit) is a full-stack e-commerce platform built for a real client — a clothing shop. The backend follows strict Clean Architecture (Domain → Application → Infrastructure → API) with CQRS via MediatR, persisted in MongoDB with a generic repository pattern. The frontend is an Angular 15 standalone SPA with a public storefront and a full admin CMS, styled entirely with Tailwind CSS. Features include a 3-tier discount/pricing engine (coupons, pack bundles, volume tiers), an order state machine with compensating stock transactions, JWT + refresh token auth, a dashboard with live analytics and a Leaflet visitor map, and a full CI/CD pipeline deployed to a VPS with nginx. The system is running in production on a VPS — serving the client's real catalog, orders, and inventory — behind nginx with Let's Encrypt SSL and systemd-managed services, while a GitHub Actions pipeline ships the backend and frontend automatically on every main merge.",
     techStack: [
       ".NET 8",
       "C#",
@@ -107,6 +107,20 @@ const projects = [
           "systemd service with secrets loaded from a chmod 600 env file — never committed to git",
           "Server provisioning script (setup-server.sh) for fresh VPS: firewall, .NET 8 runtime, Node 18, nginx, certbot, systemd, secrets template",
           "MongoMigration console tool for local→MongoDB Atlas data migration with batched inserts and index cloning",
+        ],
+      },
+      {
+        title: "Key Numbers & Scale",
+        items: [
+          "68 CQRS command/query handlers across 14 feature areas (Auth, Products, Orders, Categories, Colors, Sizes, Users, Coupons, Inventory, Medias, PackDiscounts, VolumeDiscounts, StoreSettings, Analytics)",
+          "CreateOrderCommandHandler — 446 lines implementing the 3-tier pricing engine, stock decrements, and compensation saga in one place",
+          "Order state machine with 4 driving states (Pending, Paid, Shipped, Delivered) plus Cancelled as a terminal state, all transitions guarded by CAS",
+          "File uploads up to 20 files (10 MB each, 50 MB request cap) with SHA-256 content deduplication",
+          "Refresh-token rotation: 7-day opaque tokens, old tokens revoked and chained via ReplacedByToken",
+          "Rate limiting: 5 login attempts per 15 seconds per IP via AspNetCoreRateLimit",
+          "Boot-time guard: API refuses to start if the JWT secret is missing or shorter than 32 chars",
+          "Dashboard analytics sourced from MongoDB aggregation pipelines: revenue, orders, visitors, online-now, top-selling, top-clicked, revenue-by-category",
+          "CI/CD: build + test on every push, SSH deploy on main merge to an nginx + systemd VPS",
         ],
       },
     ],
@@ -311,6 +325,39 @@ const projects = [
           },
         ],
       },
+      {
+        category: "Media & File Uploads",
+        items: [
+          {
+            title: "Multi-File Upload with SHA-256 Deduplication",
+            description: "UploadMediasCommandHandler accepts up to 20 files (10 MB each, 50 MB request cap). Every file is hashed with SHA-256 on arrival; if the hash already exists in the media store, the existing media record is returned instead of being re-stored — duplicate uploads never create duplicate records.",
+            tools: ["C#", ".NET 8", "System.Security.Cryptography", "MediatR"],
+            code: "var hash = Convert.ToHexString(SHA256.HashData(fileBytes)).ToLowerInvariant(); if (await _mediaRepo.ExistsByHashAsync(hash)) return await _mediaRepo.GetByHashAsync(hash);",
+          },
+          {
+            title: "Media Library Picker",
+            description: "The admin product form embeds a media library picker that filters existing uploads by type (image/video) and lets staff attach product images from previously uploaded media instead of forcing a re-upload for every variant.",
+            tools: ["Angular 15", "TypeScript", "Tailwind CSS"],
+          },
+        ],
+      },
+      {
+        category: "Search & Filtering",
+        items: [
+          {
+            title: "Server-Side Combined Filtering",
+            description: "Product list endpoints accept combined filters (category, colors, sizes, price range, free-text search, sort) composed from MongoDB filter builders, and always return a PagedResult<T> so the storefront and admin grids share one pagination contract.",
+            tools: ["C#", "MongoDB.Driver", "MediatR"],
+            code: "var filter = Builders<Product>.Filter.Empty; filter &= Builders<Product>.Filter.Eq(p => p.IsActive, true); if (!string.IsNullOrEmpty(search)) filter &= Builders<Product>.Filter.Regex(p => p.Title, new BsonRegularExpression(search, \"i\"));",
+          },
+          {
+            title: "Debounced Global Search Popup",
+            description: "The storefront header includes a global search popup that debounces keystrokes with RxJS, queries the products endpoint, and renders instant results with thumbnail, color, price, and stock status before navigating to the product page.",
+            tools: ["Angular 15", "TypeScript", "RxJS", "Tailwind CSS"],
+            code: "term$.pipe(debounceTime(300), distinctUntilChanged(), switchMap((t) => this.catalogSvc.search(t))).subscribe((r) => (this.results = r.items));",
+          },
+        ],
+      },
     ],
     links: ["GitHub", "View Repository"],
   },
@@ -324,7 +371,7 @@ const projects = [
     demoUrl: "https://promotunisie.com",
     githubUrl: "https://github.com/Farouk973",
     detailedDescription:
-      "Promo Tunisie is a full-stack price comparison and deals aggregator that automatically scrapes promotions from 18+ Tunisian e-commerce stores, classifies products into whitelisted categories using a two-layer machine learning classifier, stores them in MongoDB, and serves them through a REST API, an Angular SSR web frontend, and a Flutter mobile app.",
+      "Promo Tunisie is a full-stack price comparison and deals aggregator that automatically scrapes promotions from 18+ Tunisian e-commerce stores, classifies products into whitelisted categories using a two-layer machine learning classifier, stores them in MongoDB, and serves them through a REST API, an Angular SSR web frontend, and a Flutter mobile app. The pipeline is automated end-to-end: a GitHub Actions cron kicks off daily crawls at 03:00 UTC, spiders self-classify into fast direct-mode or full Scrapy mode, the classifier guards data quality with a 260+ case regression corpus, and the backend self-heals by cleaning expired promotions and atomically rebuilding the cross-store catalog.",
     techStack: [
       "Python", "Scrapy", "FastAPI", "httpx", "curl_cffi", "sentence-transformers",
       "ASP.NET Core", "MongoDB", "Angular 19", "Flutter", "Docker", "GitHub Actions"
@@ -364,6 +411,30 @@ const projects = [
           "Automatic expired-promotion cleanup in the background",
           "File-based live progress visualization across concurrent crawls",
           "Daily automated crawls via GitHub Actions cron at 03:00 UTC",
+        ],
+      },
+      {
+        title: "Scale & Performance",
+        items: [
+          "22 retailer spiders covering 18+ active Tunisian e-commerce stores",
+          "Direct-mode crawls fetch 1000+ items per store in 30-40 seconds (~3 requests/sec with token-bucket rate limiting)",
+          "Two-layer classifier: deterministic rules handle 95%+ of cases, with sentence-transformers embedding fallback for the rest",
+          "19 classification rules across 9 whitelisted categories (Phones, Computers, Tablets, Earphones, Watches, TVs, Desktops, Mouse & Keyboards, Consoles), all with independent veto layers",
+          "260+ labelled corpus driving a pytest regression gate and A/B evaluation of rules-only vs hybrid accuracy",
+          "Price history capped at 90 snapshots per promotion to bound memory while preserving genuine-deal detection",
+          "Cross-store catalog rebuilt atomically via staging-collection swap with a 30-second cooldown between rebuilds",
+          "429/global-cooldown handling with exponential backoff + jitter applied across all concurrent spiders",
+        ],
+      },
+      {
+        title: "API & Search Experience",
+        items: [
+          "Typo-tolerant, accent-free search: NFKD Unicode normalization plus Wagner-Fischer Levenshtein (distance ≤ 2, or ≤ 3 with matching first chars) for brand matching",
+          "Genuine-deal detection via price-history median — deals above their own median price are flagged as inflated and de-prioritized",
+          "Bon-plans trending feed: score = discount % + time-decayed freshness bonus for drops within the last 72 hours",
+          "API-key write protection with per-IP token-bucket rate limiting, completely separated from anonymous read limits",
+          "Canonical product grouping across stores normalized by brand, model, and capacity ('128go' → '128GB')",
+          "SEO: SSR with in-memory HTML cache, dynamic sitemap.xml + robots.txt, and schema.org Product JSON-LD with AggregateOffer rich results",
         ],
       },
     ],
